@@ -18,14 +18,18 @@ public class Deck {
 		int iCardNbr = 0;
 		for (eSuit suit : eSuit.values()) {
 			for (eRank rank : eRank.values()) {
-				//if ((suit != eSuit.JOKER) && (rank != eRank.JOKER)) {
+				if ((suit != eSuit.JOKER) && (rank != eRank.JOKER)) {
 					DeckCards.add(new Card(rank, suit, ++iCardNbr));
-				//}
+				}
 			}
 		}
 		Collections.shuffle(DeckCards);
 	}
-
+	public Deck(int jokers)
+	{
+		
+		
+	}
 	public Card DrawCard() {
 
 		return DeckCards.remove(0);
