@@ -11,7 +11,7 @@ import pkgPokerEnum.eCardNo;
 import pkgPokerEnum.eHandStrength;
 import pkgPokerEnum.eRank;
 import pkgPokerEnum.eSuit;
- 
+
 
 public class Hand {
 
@@ -52,21 +52,57 @@ public class Hand {
 
 		//	Figure out best hand
 		Collections.sort(ExplodedHands, Hand.HandRank);
-		
+
 		//	Return best hand.  
 		//	TODO: Fix...  what to do if there is a tie?
 		return ExplodedHands.get(0);
 	}
 
-	
+
 	//TODO: one hand is passed in, 1, 52, 2704, etc are passed back
 	//		No jokers, 'ReturnHands' should have one hand
 	//		One Wild/joker 'ReturnHands' should have 52 hands, etc
-	
+
 	public static ArrayList<Hand> ExplodeHands(Hand h) {
 
 		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();
+		int cardNum = 0; 
+		for(Card c: h.getCardsInHand()){
+			if(c.isWild())
+				h.getCardsInHand().remove(h.getCardsInHand().indexOf(c)); //remove the wild
+				cardNum = c.getiCardNbr(); //get the cardnum since we need that to make the replacement
+				break;
+		}
+		for(eSuit s: eSuit.values()){
+			for(eRank r: eRank.values()){
+				Card toAdd = new Card(s,r,cardNum); //generate replacement
+				h.getCardsInHand().add(toAdd); //add it to the current hand
+				ReturnHands.add(h); //add the current hand to the list of them 
+				h.getCardsInHand().remove(h.getCardsInHand().indexOf(toAdd)); //getting rid of the replacement card so it can be replaced
+			}
+		}
+
 		return ReturnHands;
+	}
+
+	public static void ExplodeHands(ArrayList<Hand> Hands) {
+		ArrayList<Hand> finalHands = new ArrayList<Hand>();
+		//Count up number of wild cards
+		int numWilds = 0;
+
+		for(Card c:Hands.get(0).getCardsInHand()){ //figure out number of wilds
+			if(c.isWild())
+				numWilds++;
+		}
+		
+		for(int x = numWilds; x > 0; x-- ){ 
+			for(Hand h: Hands){
+				ArrayList<Hand> r = ExplodeHands(h);
+				for(Hand z:r){
+					finalHands.add(z);
+				}
+			}
+		}
 	}
 
 	private static Hand EvaluateHand(Hand h) {
@@ -79,6 +115,7 @@ public class Hand {
 		HandScore hs = new HandScore();
 		try {
 			Class<?> c = Class.forName("pkgPokerBLL.Hand");
+
 
 			for (eHandStrength hstr : eHandStrength.values()) {
 				Class[] cArg = new Class[2];
@@ -316,7 +353,7 @@ public class Hand {
 		if ((h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank() == h.getCardsInHand()
 				.get(eCardNo.SecondCard.getCardNo()).geteRank())
 				&& (h.getCardsInHand().get(eCardNo.ThirdCard.getCardNo()).geteRank() == h.getCardsInHand()
-						.get(eCardNo.FourthCard.getCardNo()).geteRank())) {
+				.get(eCardNo.FourthCard.getCardNo()).geteRank())) {
 			isHandTwoPair = true;
 			hs.setHiHand(h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank());
 			hs.setLoHand(h.getCardsInHand().get(eCardNo.ThirdCard.getCardNo()).geteRank());
@@ -325,7 +362,7 @@ public class Hand {
 		} else if ((h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank() == h.getCardsInHand()
 				.get(eCardNo.SecondCard.getCardNo()).geteRank())
 				&& (h.getCardsInHand().get(eCardNo.FourthCard.getCardNo()).geteRank() == h.getCardsInHand()
-						.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
+				.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
 			isHandTwoPair = true;
 			hs.setHiHand(h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank());
 			hs.setLoHand(h.getCardsInHand().get(eCardNo.FourthCard.getCardNo()).geteRank());
@@ -334,7 +371,7 @@ public class Hand {
 		} else if ((h.getCardsInHand().get(eCardNo.SecondCard.getCardNo()).geteRank() == h.getCardsInHand()
 				.get(eCardNo.ThirdCard.getCardNo()).geteRank())
 				&& (h.getCardsInHand().get(eCardNo.FourthCard.getCardNo()).geteRank() == h.getCardsInHand()
-						.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
+				.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
 			isHandTwoPair = true;
 			hs.setHiHand(h.getCardsInHand().get(eCardNo.SecondCard.getCardNo()).geteRank());
 			hs.setLoHand(h.getCardsInHand().get(eCardNo.FourthCard.getCardNo()).geteRank());
@@ -429,7 +466,7 @@ public class Hand {
 		if ((h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank() == h.getCardsInHand()
 				.get(eCardNo.ThirdCard.getCardNo()).geteRank())
 				&& (h.getCardsInHand().get(eCardNo.FourthCard.getCardNo()).geteRank() == h.getCardsInHand()
-						.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
+				.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
 			isFullHouse = true;
 
 			hs.setHandStrength(eHandStrength.FullHouse);
@@ -439,7 +476,7 @@ public class Hand {
 		} else if ((h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank() == h.getCardsInHand()
 				.get(eCardNo.SecondCard.getCardNo()).geteRank())
 				&& (h.getCardsInHand().get(eCardNo.ThirdCard.getCardNo()).geteRank() == h.getCardsInHand()
-						.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
+				.get(eCardNo.FifthCard.getCardNo()).geteRank())) {
 			isFullHouse = true;
 			hs.setHandStrength(eHandStrength.FullHouse);
 			hs.setHiHand(h.getCardsInHand().get(eCardNo.ThirdCard.getCardNo()).geteRank());
@@ -480,7 +517,7 @@ public class Hand {
 				if (h1.getHandScore().getKickers().size() > 0) {
 					result = h2.getHandScore().getKickers().get(eCardNo.FirstCard.getCardNo()).geteRank().getiRankNbr()
 							- h1.getHandScore().getKickers().get(eCardNo.FirstCard.getCardNo()).geteRank()
-									.getiRankNbr();
+							.getiRankNbr();
 				}
 				if (result != 0) {
 					return result;
@@ -491,7 +528,7 @@ public class Hand {
 				if (h1.getHandScore().getKickers().size() > 1) {
 					result = h2.getHandScore().getKickers().get(eCardNo.SecondCard.getCardNo()).geteRank().getiRankNbr()
 							- h1.getHandScore().getKickers().get(eCardNo.SecondCard.getCardNo()).geteRank()
-									.getiRankNbr();
+							.getiRankNbr();
 				}
 				if (result != 0) {
 					return result;
@@ -502,7 +539,7 @@ public class Hand {
 				if (h1.getHandScore().getKickers().size() > 2) {
 					result = h2.getHandScore().getKickers().get(eCardNo.ThirdCard.getCardNo()).geteRank().getiRankNbr()
 							- h1.getHandScore().getKickers().get(eCardNo.ThirdCard.getCardNo()).geteRank()
-									.getiRankNbr();
+							.getiRankNbr();
 				}
 				if (result != 0) {
 					return result;
@@ -513,7 +550,7 @@ public class Hand {
 				if (h1.getHandScore().getKickers().size() > 3) {
 					result = h2.getHandScore().getKickers().get(eCardNo.FourthCard.getCardNo()).geteRank().getiRankNbr()
 							- h1.getHandScore().getKickers().get(eCardNo.FourthCard.getCardNo()).geteRank()
-									.getiRankNbr();
+							.getiRankNbr();
 				}
 				if (result != 0) {
 					return result;
