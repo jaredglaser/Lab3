@@ -27,7 +27,15 @@ public class Deck {
 	}
 
 	public Card DrawCard() {
-
-		return DeckCards.remove(0);
+		try{
+			if(DeckCards.size() == 0){
+				throw new DeckExecption("Deck of Cards is empty");
+			}
+			return DeckCards.remove(0);
+		}
+		catch(DeckExecption d)
+		{
+			print(d.getMessage());
+		}
 	}
 }
