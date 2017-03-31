@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.UUID;
 
+import pkgException.HandException;
 import pkgPokerEnum.eCardNo;
 import pkgPokerEnum.eHandStrength;
 import pkgPokerEnum.eRank;
@@ -105,8 +106,10 @@ public class Hand {
 		}
 	}
 
-	private static Hand EvaluateHand(Hand h) {
-
+	private static Hand EvaluateHand(Hand h) throws HandException {
+		if(h.getCardsInHand().size() != 5){
+			throw new HandException("Hand does not have 5 cards.");
+		}
 		Collections.sort(h.getCardsInHand());
 
 		// Another way to sort
