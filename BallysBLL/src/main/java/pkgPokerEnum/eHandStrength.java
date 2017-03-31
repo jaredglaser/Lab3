@@ -1,8 +1,13 @@
 package pkgPokerEnum;
 
 public enum eHandStrength {
-
-	RoyalFlush(100, "isHandRoyalFlush") {
+	
+	FiveOfAKInd(100, "isHandFiveOfAKind"){
+		public String toString() {
+			return "Five of a Kind";
+		}
+	},
+	RoyalFlush(95, "isHandRoyalFlush") {
 		public String toString() {
 			return "Royal Flush";
 		}
