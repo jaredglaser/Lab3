@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
+import pkgException.DeckException;
 import pkgPokerEnum.eRank;
 import pkgPokerEnum.eSuit;
 
@@ -25,21 +26,22 @@ public class Deck {
 		}
 		Collections.shuffle(DeckCards);
 	}
+
 	public Deck(int jokers)
 	{
-		
-		
+		super();
+		int iCardNbr = 52;
+		for(int i = 0; i < 3; i++){
+			DeckCards.add(new Card(eRank.JOKER,eSuit.JOKER, ++iCardNbr));
+		}
+		Collections.shuffle(DeckCards);
+
 	}
-	public Card DrawCard() {
-		try{
-			if(DeckCards.size() == 0){
-				throw new DeckExecption("Deck of Cards is empty");
-			}
-			return DeckCards.remove(0);
+	public Card DrawCard() throws DeckException {
+
+		if(DeckCards.size() == 0){
+			throw new DeckException("Deck of Cards is empty");
 		}
-		catch(DeckExecption d)
-		{
-			print(d.getMessage());
-		}
+		return DeckCards.remove(0);
 	}
 }

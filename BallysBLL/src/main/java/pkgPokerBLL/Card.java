@@ -10,7 +10,7 @@ public class Card implements Comparable {
 	private eRank eRank;
 	private eSuit eSuit;
 	private int iCardNbr;
-	private boolean isWild;
+	private boolean isWild = false;
 
 	public Card() {
 	}
