@@ -19,16 +19,9 @@ public class Game {
 		return GameID;
 	}
 
-	public void setGameID(UUID gameID) {
-		GameID = gameID;
-	}
 
 	public UUID getTableID() {
 		return TableID;
-	}
-
-	public void setTableID(UUID tableID) {
-		TableID = tableID;
 	}
 
 	public ArrayList<Player> getGamePlayers() {
