@@ -41,6 +41,30 @@ public class Hand_Test {
 	
 	
 	
+	@Test
+	public void TestOneJoker() {
+		Hand h = new Hand();
+ 
+		
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.JACK,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.QUEEN,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.KING,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1,true));
+		
+		
+		try {
+			h = h.EvaluateHand();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(h.getHandScore().getHandStrength());
+		System.out.println(h.getHandScore().getHiHand());
+		
+		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.RoyalFlush);
+		assertTrue(h.getHandScore().getHiHand() == eRank.ACE);
+		
+	}
 	
 	@Test
 	public void TestRodyalFlush() {
