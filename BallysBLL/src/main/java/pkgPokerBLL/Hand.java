@@ -251,6 +251,26 @@ public class Hand {
 	}
 
 	// TODO: Implement This Method
+	public static boolean isHandFiveOfAKind(Hand h, HandScore hs) {
+
+		boolean isHandFiveOfAKind = false;
+
+		ArrayList<Card> kickers = new ArrayList<Card>();
+		if (h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank() == h.getCardsInHand()
+				.get(eCardNo.FifthCard.getCardNo()).geteRank()) {
+			isHandFiveOfAKind = true;
+			hs.setHiHand(h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank());
+		} 
+
+		if (isHandFiveOfAKind) {
+			hs.setHandStrength(eHandStrength.FiveOfAKind);
+			hs.setLoHand(null);
+			hs.setKickers(kickers);
+		}
+
+		return isHandFiveOfAKind;
+	}
+	
 	public static boolean isHandFourOfAKind(Hand h, HandScore hs) {
 
 		boolean isHandFourOfAKind = false;
