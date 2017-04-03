@@ -47,6 +47,9 @@ public class Hand {
 
 		ArrayList<Hand> ExplodedHands = ExplodeHands(this);
 
+		
+		
+		
 		for (Hand hand : ExplodedHands) {
 			hand = Hand.EvaluateHand(hand);
 		}
@@ -65,37 +68,46 @@ public class Hand {
 	//		One Wild/joker 'ReturnHands' should have 52 hands, etc
 
 	public static ArrayList<Hand> ExplodeHands(Hand h) {
-
-		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();
-		int cardNum = 0; 
-		Card cardRemoved = null;
+		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();			
+		
+		ReturnHands.add(h);
 		for(Card c: h.getCardsInHand()){
 			if(c.isWild()){
-				cardRemoved = h.getCardsInHand().remove(h.getCardsInHand().indexOf(c)); //remove the wild
-				cardNum = c.getiCardNbr(); //get the cardnum since we need that to make the replacement
-				break;
+				int inx = h.getCardsInHand().indexOf(c);
+				ReturnHands = SubstituteCards(ReturnHands,inx);
 			}
 
 		}
 
-
-		for(eSuit s: eSuit.values()){
-
-			for(eRank r: eRank.values()){
-
-				Card toAdd = new Card(s,r,cardNum); //generate replacement
-				h.getCardsInHand().add(toAdd); //add it to the current hand
-				ReturnHands.add(h); //add the current hand to the list of them 
-				h.getCardsInHand().remove(h.getCardsInHand().indexOf(toAdd)); //getting rid of the replacement card so it can be replaced
-			}
-		}
-		if(cardRemoved != null)
-			h.getCardsInHand().add(cardRemoved);
-		System.out.println(ReturnHands.size());
+		
 		return ReturnHands;
 	}
 
-	public static void ExplodeHands(ArrayList<Hand> Hands) {
+	private static ArrayList<Hand> SubstituteCards(ArrayList<Hand> ReturnHands, int inx){
+		Deck d = new Deck();
+		ArrayList<Hand> SubHands = new ArrayList<Hand>();
+		for(Hand h: ReturnHands){
+			for(Card c : h.getCardsInHand()){
+				if(h.getCardsInHand().indexOf(c) == inx){
+
+					for(Card subCard: d.getCards()){
+						Hand newHand = new Hand();
+
+						for(Card c1: h.getCardsInHand()){
+							if(h.getCardsInHand().indexOf(c1) != inx)
+								newHand.AddCardToHand(c1);
+							else
+								newHand.AddCardToHand(subCard);
+						}
+						SubHands.add(newHand);
+					}
+				}
+			}
+		}
+		return SubHands;
+
+	}
+	/*public static void ExplodeHands(ArrayList<Hand> Hands) {
 		ArrayList<Hand> finalHands = new ArrayList<Hand>();
 		//Count up number of wild cards
 		int numWilds = 0;
@@ -113,7 +125,7 @@ public class Hand {
 				}
 			}
 		}
-	}
+	}*/
 
 	private static Hand EvaluateHand(Hand h) throws HandException {
 		if(h.getCardsInHand().size() != 5){

@@ -44,4 +44,7 @@ public class Deck {
 		}
 		return DeckCards.remove(0);
 	}
+	ArrayList<Card> getCards(){
+		return DeckCards;
+	}
 }

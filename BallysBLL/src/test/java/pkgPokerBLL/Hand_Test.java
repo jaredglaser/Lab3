@@ -1,7 +1,8 @@
 package pkgPokerBLL;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -38,9 +39,6 @@ public class Hand_Test {
 
 	
 
-	
-	
-	
 	@Test
 	public void TestOneJoker() {
 		Hand h = new Hand();
@@ -49,9 +47,14 @@ public class Hand_Test {
 		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1));
 		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.JACK,1));
 		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.QUEEN,1));
-		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.KING,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.KING, 1));
 		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
 		
+		ArrayList<Hand> Hands = new ArrayList<Hand>();
+		
+		Hands = Hand.ExplodeHands(h);
+		
+		assertEquals(Hands.size(), 52);
 		
 		try {
 			h = h.EvaluateHand();
@@ -59,11 +62,92 @@ public class Hand_Test {
 			e.printStackTrace();
 		}
 		System.out.println(h.getHandScore().getHandStrength());
-		System.out.println(h.getHandScore().getHiHand());
-		
 		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.RoyalFlush);
-		assertTrue(h.getHandScore().getHiHand() == eRank.ACE);
+	}
+	
+	
+	@Test
+	public void TestTwoJoker() {
+		Hand h = new Hand();
+ 
 		
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.JACK,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.FIVE,1));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		
+		ArrayList<Hand> Hands = new ArrayList<Hand>();
+		
+		Hands = Hand.ExplodeHands(h);
+		
+		assertEquals(Hands.size(), 2704);
+		
+//		for(Hand h1: Hands){
+//			for(Card c : h1.getCardsInHand()){
+//				System.out.println(c.geteSuit() + " " + c.geteRank());
+//			}
+//		}
+		try {
+			h = h.EvaluateHand();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.Flush);
+		
+		
+	}
+	
+	@Test
+	public void TestThreeJoker() {
+		Hand h = new Hand();
+ 
+		
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1));
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.JACK,1));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		
+		ArrayList<Hand> Hands = new ArrayList<Hand>();
+		
+		Hands = Hand.ExplodeHands(h);
+		
+		assertEquals(Hands.size(), 140608);
+		
+		try {
+			h = h.EvaluateHand();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(h.getHandScore().getHandStrength());
+		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.RoyalFlush);
+	}
+	
+	@Test
+	public void TestFourJoker() {
+		Hand h = new Hand();
+ 
+		
+		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		
+		ArrayList<Hand> Hands = new ArrayList<Hand>();
+		
+		Hands = Hand.ExplodeHands(h);
+		
+		//assertEquals(Hands.size(), 7311616); too many hands to generate, if four jokers there is a hard coded shortcut
+		
+		try {
+			h = h.EvaluateHand();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(h.getHandScore().getHandStrength());
+		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.FiveOfAKind);
 	}
 	
 	@Test
