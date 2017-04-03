@@ -50,7 +50,7 @@ public class Hand_Test {
 		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.JACK,1));
 		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.QUEEN,1));
 		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.KING,1));
-		h.AddToCardsInHand(new Card(eSuit.CLUBS, eRank.TEN,1,true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
 		
 		
 		try {

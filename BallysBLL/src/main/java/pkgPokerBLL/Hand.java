@@ -68,32 +68,30 @@ public class Hand {
 
 		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();
 		int cardNum = 0; 
+		Card cardRemoved = null;
 		for(Card c: h.getCardsInHand()){
 			if(c.isWild()){
-				h.getCardsInHand().remove(h.getCardsInHand().indexOf(c)); //remove the wild
+				cardRemoved = h.getCardsInHand().remove(h.getCardsInHand().indexOf(c)); //remove the wild
 				cardNum = c.getiCardNbr(); //get the cardnum since we need that to make the replacement
 				break;
 			}
-			
+
 		}
 
-		boolean goodHand = true; //stops hands generated with joker cards
+
 		for(eSuit s: eSuit.values()){
-			goodHand = true;
-			if(s.equals(eSuit.JOKER))
-				goodHand = false;
+
 			for(eRank r: eRank.values()){
-				if(r.equals(eRank.JOKER))
-					goodHand = false;
-				if(goodHand){
-					Card toAdd = new Card(s,r,cardNum); //generate replacement
-					h.getCardsInHand().add(toAdd); //add it to the current hand
-					ReturnHands.add(h); //add the current hand to the list of them 
-					h.getCardsInHand().remove(h.getCardsInHand().indexOf(toAdd)); //getting rid of the replacement card so it can be replaced
-				}
+
+				Card toAdd = new Card(s,r,cardNum); //generate replacement
+				h.getCardsInHand().add(toAdd); //add it to the current hand
+				ReturnHands.add(h); //add the current hand to the list of them 
+				h.getCardsInHand().remove(h.getCardsInHand().indexOf(toAdd)); //getting rid of the replacement card so it can be replaced
 			}
 		}
-
+		if(cardRemoved != null)
+			h.getCardsInHand().add(cardRemoved);
+		System.out.println(ReturnHands.size());
 		return ReturnHands;
 	}
 
