@@ -40,7 +40,7 @@ public class Hand_Test {
 	
 
 	@Test
-	public void TestOneJoker() {
+	public void TestOneWild() {
 		Hand h = new Hand();
  
 		
@@ -61,13 +61,13 @@ public class Hand_Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(h.getHandScore().getHandStrength());
+		
 		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.RoyalFlush);
 	}
 	
 	
 	@Test
-	public void TestTwoJoker() {
+	public void TestTwoWild() {
 		Hand h = new Hand();
  
 		
@@ -99,7 +99,7 @@ public class Hand_Test {
 	}
 	
 	@Test
-	public void TestThreeJoker() {
+	public void TestThreeWild() {
 		Hand h = new Hand();
  
 		
@@ -120,12 +120,12 @@ public class Hand_Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(h.getHandScore().getHandStrength());
+		
 		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.RoyalFlush);
 	}
 	
 	@Test
-	public void TestFourJoker() {
+	public void TestFourWild() {
 		Hand h = new Hand();
  
 		
@@ -146,8 +146,35 @@ public class Hand_Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(h.getHandScore().getHandStrength());
+		
 		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.FiveOfAKind);
+	}
+	
+	@Test
+	public void TestFiveWild() {
+		Hand h = new Hand();
+ 
+		
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		h.AddToCardsInHand(new Card(eSuit.JOKER, eRank.JOKER,1, true));
+		
+		ArrayList<Hand> Hands = new ArrayList<Hand>();
+		
+		Hands = Hand.ExplodeHands(h);
+		
+		//assertEquals(Hands.size(), 7311616); too many hands to generate, if five jokers there is a hard coded shortcut
+		
+		try {
+			h = h.EvaluateHand();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		assertTrue(h.getHandScore().getHandStrength() == eHandStrength.FiveOfAKind);
+		assertTrue(h.getHandScore().getHiHand() == eRank.ACE);
 	}
 	
 	@Test

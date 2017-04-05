@@ -47,9 +47,9 @@ public class Hand {
 
 		ArrayList<Hand> ExplodedHands = ExplodeHands(this);
 
-		
-		
-		
+
+
+
 		for (Hand hand : ExplodedHands) {
 			hand = Hand.EvaluateHand(hand);
 		}
@@ -68,21 +68,48 @@ public class Hand {
 	//		One Wild/joker 'ReturnHands' should have 52 hands, etc
 
 	public static ArrayList<Hand> ExplodeHands(Hand h) {
-		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();			
-		
-		ReturnHands.add(h);
-		for(Card c: h.getCardsInHand()){
-			if(c.isWild()){
-				int inx = h.getCardsInHand().indexOf(c);
-				ReturnHands = SubstituteCards(ReturnHands,inx);
-			}
+		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();           
 
+		int wildCount = 0;
+		int nonWildPos = 0;
+		for(int y = 0; y < h.getCardsInHand().size(); y++){
+			if(h.getCardsInHand().get(y).isWild()){
+				wildCount++;
+			}
+			else{
+				nonWildPos = y;
+			}
+		}
+		if(wildCount == 5){
+			Hand j = new Hand();
+			for(int o = 0; o < 5; o++){
+				Card g = new Card(eRank.ACE,eSuit.CLUBS, 14);
+				j.AddCardToHand(g);
+			}
+			ReturnHands.add(j);
+		}
+		else if(wildCount == 4){
+			Hand k = new Hand();
+			for(int o = 0; o < 5; o++){
+				k.AddCardToHand((h.getCardsInHand().get(nonWildPos)));
+			}
+			ReturnHands.add(k);
+		}
+		else{
+
+			ReturnHands.add(h);
+
+			for(Card c: h.getCardsInHand()){
+				if(c.isWild()){
+					int inx = h.getCardsInHand().indexOf(c);
+					ReturnHands = SubstituteCards(ReturnHands,inx);
+				}
+
+			}
 		}
 
-		
 		return ReturnHands;
 	}
-
 	private static ArrayList<Hand> SubstituteCards(ArrayList<Hand> ReturnHands, int inx){
 		Deck d = new Deck();
 		ArrayList<Hand> SubHands = new ArrayList<Hand>();
